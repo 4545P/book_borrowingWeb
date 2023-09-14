@@ -78,9 +78,6 @@
                         class-name="small-padding fixed-width"
                     >
                         <template #default="{ row }">
-                            <el-button round @click="details(row)"
-                                >details</el-button
-                            >
                             <el-button
                                 type="primary"
                                 round
