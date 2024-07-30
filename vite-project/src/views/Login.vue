@@ -24,25 +24,20 @@
         </form>
     </div>
 </template>
-
-<script>
+<script lang="ts">
 import axios from "axios";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-
 export default {
     setup() {
         const phone = ref("admin");
         const password = ref("admin");
-
         const router = useRouter();
         const login = async (event) => {
             event.preventDefault();
-
             try {
-                const { useUserStore } = await import("../store/index");
+                const { useUserStore } = await import("@store/index");
                 const userStore = useUserStore();
-
                 const response = await axios.post(
                     "http://localhost:8080/api/user/isValid",
                     {
@@ -50,7 +45,6 @@ export default {
                         password: password.value,
                     }
                 );
-
                 if (response.status === 200) {
                     const userInfo = {
                         userId: response.data.userId,
@@ -73,7 +67,6 @@ export default {
         const register = () => {
             router.push("/register"); // 假设注册页面的路由路径是 '/register'
         };
-
         return {
             phone,
             password,
@@ -84,7 +77,6 @@ export default {
     },
 };
 </script>
-
 <style lang="scss">
 *,
 *::after,
@@ -93,7 +85,6 @@ export default {
     padding: 0;
     box-sizing: border-box;
 }
-
 .body {
     display: flex;
     width: 100%;
@@ -102,7 +93,6 @@ export default {
     justify-content: center;
     background-color: #999;
 }
-
 .login {
     background-color: #777;
     width: 400px;
@@ -110,7 +100,6 @@ export default {
     padding: 40px;
     box-shadow: 10px 10px 25px #000;
 }
-
 input {
     display: block;
     margin: 20px auto;
@@ -122,30 +111,25 @@ input {
     outline: none;
     color: aliceblue;
 }
-
 .text,
 .password {
     border: 2px solid #3498db;
     width: 220px;
 }
-
 .text:focus,
 .password:focus {
     border-color: #2ecc71;
     width: 280px;
     transition: 0.5s;
 }
-
 .checkbox {
     margin: 0 0;
 }
-
 .submit {
     width: 150px;
     border: 2px solid #2ecc71;
     cursor: pointer;
 }
-
 .submit:hover {
     background-color: #2ecc71;
     transition: 0.5s;

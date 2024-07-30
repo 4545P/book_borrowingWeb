@@ -24,7 +24,6 @@
             prop="introduction"
             style="display: flex; margin: 0 auto; padding: 8px; width: 70%"
         />
-
         <el-form-item>
             <el-button
                 type="primary"
@@ -36,7 +35,7 @@
         </el-form-item>
     </el-dialog>
 </template>
-<script>
+<script lang="ts">
 import { ref } from "vue";
 import axios from "axios";
 
@@ -52,13 +51,11 @@ export default {
             author: "",
             introduction: "",
         });
-
         const submitBookForm = () => {
             emit("update:visible", false);
             emit("submit", form.value);
             emit("close");
         };
-
         const bookForm = () => {
             axios
                 .post("http://localhost:8080/api/book/add", form.value)
@@ -71,7 +68,6 @@ export default {
                     alert("新增失敗");
                 });
         };
-
         return {
             visibleRef,
             form,
@@ -81,4 +77,3 @@ export default {
     },
 };
 </script>
-<style lang=""></style>

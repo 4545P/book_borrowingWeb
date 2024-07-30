@@ -8,7 +8,6 @@
                     style="width: 180px; height: 65px"
                     class="filter-item"
                 />
-
                 <el-button
                     type="primary"
                     round
@@ -32,7 +31,6 @@
                     >LogOut</el-button
                 >
             </div>
-
             <div class="list-container">
                 <el-table
                     :data="tableData"
@@ -70,7 +68,6 @@
                             <span class="link-type">{{ row.status }}</span>
                         </template>
                     </el-table-column>
-
                     <el-table-column
                         label="Operate"
                         align="center"
@@ -120,7 +117,6 @@
                     </span>
                 </el-dialog>
             </div>
-
             <el-dialog>
                 <el-form
                     ref="dataForm"
@@ -153,13 +149,12 @@
         @close="closeDialog"
     />
 </template>
-
-<script>
+<script lang="ts">
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import addBook from "../components/Book.vue";
+import addBook from "@components/Book.vue";
 import { useRouter } from "vue-router";
-import { useUserStore } from "../store/index";
+import { useUserStore } from "@store/index";
 export default {
     props: {},
     components: {
@@ -174,13 +169,11 @@ export default {
         const listQuery = ref({
             name: "",
         });
-
         const fetchBook = async () => {
             const url = "http://localhost:8080/api/getBook";
             const requestData = {
                 name: listQuery.value.name.trim(),
             };
-
             try {
                 const response = await axios.post(url, requestData);
                 tableData.value = response.data.list;
@@ -189,14 +182,12 @@ export default {
                 console.error("Error fetching data:", error);
             }
         };
-
         const AddBook = () => {
             bookVisible.value = true;
         };
         const handleAddBookClose = () => {
             bookVisible.value = false;
         };
-
         const borrowingBook = async (row) => {
             const url = "http://localhost:8080/api/book/borrowing";
             try {
@@ -205,7 +196,6 @@ export default {
                     inventoryId: row.inventoryId,
                 };
                 const response = await axios.post(url, requestData);
-
                 if (response.data.message === "借閱成功") {
                     console.log(response.data);
                     alert("借閱成功");
@@ -218,7 +208,6 @@ export default {
                 console.error("Error borrowing book:", error);
             }
         };
-
         const returnBook = async (row) => {
             const url = "http://localhost:8080/api/book/return";
             try {
@@ -227,7 +216,6 @@ export default {
                     inventoryId: row.inventoryId,
                 };
                 const response = await axios.post(url, requestData);
-
                 if (response.data.message === "還書成功") {
                     console.log(response.data);
                     alert("還書成功");
@@ -242,7 +230,6 @@ export default {
                 console.error("Error return book:", error);
             }
         };
-
         const stock = async (row) => {
             const url = "http://localhost:8080/api/book/stock";
             try {
@@ -250,7 +237,6 @@ export default {
                     inventoryId: row.inventoryId,
                 };
                 const response = await axios.post(url, requestData);
-
                 if (response.data.message === "在庫") {
                     console.log(response.data);
                     alert("整理完成 入庫");
@@ -261,7 +247,6 @@ export default {
                 console.error("Error stock :", error);
             }
         };
-
         const lost = async (row) => {
             const url = "http://localhost:8080/api/book/lost";
             try {
@@ -269,7 +254,6 @@ export default {
                     inventoryId: row.inventoryId,
                 };
                 const response = await axios.post(url, requestData);
-
                 if (response.data.message === "遺失") {
                     console.log(response.data);
                     alert("登記遺失");
@@ -280,7 +264,6 @@ export default {
                 console.error("Error lost :", error);
             }
         };
-
         const damaged = async (row) => {
             const url = "http://localhost:8080/api/book/damaged";
             try {
@@ -288,7 +271,6 @@ export default {
                     inventoryId: row.inventoryId,
                 };
                 const response = await axios.post(url, requestData);
-
                 if (response.data.message === "損毀") {
                     console.log(response.data);
                     alert("登記損毀");
@@ -299,7 +281,6 @@ export default {
                 console.error("Error damaged :", error);
             }
         };
-
         const scrap = async (row) => {
             const url = "http://localhost:8080/api/book/scrap";
             try {
@@ -307,7 +288,6 @@ export default {
                     inventoryId: row.inventoryId,
                 };
                 const response = await axios.post(url, requestData);
-
                 if (response.data.message === "報廢") {
                     console.log(response.data);
                     alert("登記報廢");
@@ -318,19 +298,16 @@ export default {
                 console.error("Error scrap :", error);
             }
         };
-
         const form = ref({
             inventoryId: "",
             isbn: "",
             name: "",
             status: "",
         });
-
         // 進網頁時自動刷新列表
         onMounted(() => {
             fetchBook();
         });
-
         const router = useRouter();
         const logout = () => {
             const userStore = useUserStore();
@@ -338,7 +315,6 @@ export default {
             userStore.clearUser();
             router.push("/login");
         };
-
         return {
             value,
             input,
@@ -361,7 +337,6 @@ export default {
     },
 };
 </script>
-
 <style lang="scss" scoped>
 .filter-container {
     display: flex;
