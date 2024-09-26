@@ -14,7 +14,12 @@
                 class="password"
                 v-model="password"
             />
-            <input type="submit" value="submit" class="submit" />
+            <input type="submit" value="送出" class="submit" />
+            <input type="reset" value="清空" class="submit" />
+            <a href="/login" class="btn">
+                返回
+                <span></span><span></span><span></span><span></span>
+            </a>
         </form>
     </div>
 </template>
@@ -30,7 +35,7 @@ export default {
         const phone = ref("");
         const password = ref("");
         const router = useRouter();
-        const login = async (event) => {
+        const login = async (event: { preventDefault: () => void; }) => {
             event.preventDefault();
             try {
                 await import("@store/index");
@@ -42,12 +47,12 @@ export default {
                         password: password.value,
                     }
                 );
-                console.log(response.data.message);
-                if (response.data.message === "註冊成功") {
+                const { message } = response.data;
+                if (response.data.message === "成功") {
                     alert("註冊成功 跳轉首頁");
                     router.push("/home");
                 } else {
-                    alert("欄位為空");
+                    alert(`註冊失敗: ${message}`);
                 }
             } catch (error) {
                 alert("註冊請求出錯");
@@ -64,61 +69,3 @@ export default {
     },
 };
 </script>
-<style lang="scss">
-*,
-*::after,
-*::before {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-.body {
-    display: flex;
-    width: 100%;
-    height: 100vh;
-    align-items: center;
-    justify-content: center;
-    background-color: #999;
-}
-.login {
-    background-color: #777;
-    width: 400px;
-    color: wheat;
-    padding: 40px;
-    box-shadow: 10px 10px 25px #000;
-}
-input {
-    display: block;
-    margin: 20px auto;
-    text-align: center;
-    background: none;
-    padding: 12px;
-    font-size: 15px;
-    border-radius: 20px;
-    outline: none;
-    color: aliceblue;
-}
-.text,
-.password {
-    border: 2px solid #3498db;
-    width: 220px;
-}
-.text:focus,
-.password:focus {
-    border-color: #2ecc71;
-    width: 280px;
-    transition: 0.5s;
-}
-.checkbox {
-    margin: 0 0;
-}
-.submit {
-    width: 150px;
-    border: 2px solid #2ecc71;
-    cursor: pointer;
-}
-.submit:hover {
-    background-color: #2ecc71;
-    transition: 0.5s;
-}
-</style>

@@ -4,7 +4,7 @@
             <div class="filter-container">
                 <el-input
                     v-model="listQuery.name"
-                    placeholder="name"
+                    placeholder="書名"
                     style="width: 180px; height: 65px"
                     class="filter-item"
                 />
@@ -13,23 +13,22 @@
                     round
                     style="margin-left: 12px"
                     @click="fetchBook"
-                    >Search</el-button
-                >
+                >搜尋
+                </el-button>
                 <el-button
                     type="primary"
                     round
                     style="margin-left: 12px"
                     @click="AddBook"
-                >
-                    AddBook
+                >新增書籍
                 </el-button>
                 <el-button
                     type="primary"
                     round
                     style="margin-left: 12px"
                     @click="logout"
-                    >LogOut</el-button
-                >
+                >登出
+                </el-button>
             </div>
             <div class="list-container">
                 <el-table
@@ -54,78 +53,45 @@
                             <span class="link-type">{{ row.isbn }}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column label="Name" prop="name" min-width="70px">
+                    <el-table-column label="書名" prop="name" min-width="70px">
                         <template #default="{ row }">
                             <span class="link-type">{{ row.name }}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column
-                        label="Status"
-                        prop="status"
-                        min-width="70px"
-                    >
+                    <el-table-column label="狀態" prop="status" min-width="70px">
                         <template #default="{ row }">
                             <span class="link-type">{{ row.status }}</span>
                         </template>
                     </el-table-column>
-                    <el-table-column
-                        label="Operate"
-                        align="center"
-                        width="750"
-                        class-name="small-padding fixed-width"
-                    >
+                    <el-table-column label="操作" align="center" width="750" class-name="small-padding fixed-width">
                         <template #default="{ row }">
-                            <el-button
-                                type="primary"
-                                round
-                                @click="borrowingBook(row)"
-                                >borrowingBook</el-button
-                            >
-                            <el-button
-                                type="success"
-                                round
-                                @click="returnBook(row)"
-                                >returnBook</el-button
-                            >
-                            <el-button round @click="stock(row)"
-                                >stock</el-button
-                            >
-                            <el-button type="info" round @click="lost(row)"
-                                >lost</el-button
-                            >
-                            <el-button
-                                type="warning"
-                                round
-                                @click="damaged(row)"
-                                >damaged</el-button
-                            >
-                            <el-button type="danger" round @click="scrap(row)"
-                                >scrap</el-button
-                            >
+                            <el-button type="primary" round @click="borrowingBook(row)">借書</el-button>
+                            <el-button type="success" round @click="returnBook(row)">還書</el-button>
+                            <el-button round @click="stock(row)">入庫</el-button>
+                            <el-button type="info" round @click="lost(row)">遺失</el-button>
+                            <el-button type="warning" round @click="damaged(row)">損毀</el-button>
+                            <el-button type="danger" round @click="scrap(row)">銷毀</el-button>
                         </template>
                     </el-table-column>
                 </el-table>
                 <el-dialog title="Chart" width="70%">
                     <div class="chart-container">
-                        <div
-                            id="pieChart"
-                            style="width: 100%; height: 400px"
-                        ></div>
+                        <div id="pieChart" style="width: 100%; height: 400px"></div>
                     </div>
                     <span class="dialog-footer">
-                        <el-button>Close</el-button>
+                        <el-button>離開</el-button>
                     </span>
                 </el-dialog>
             </div>
             <el-dialog>
                 <el-form
                     ref="dataForm"
-                    :rules="rules"
                     :model="listQuery"
                     label-position="left"
                     label-width="70px"
                     style="width: 400px; margin-left: 50px"
-                >
+            >
+            </el-form>
                     <el-form-item label="Type" prop="type">
                         <el-select
                             v-model="listQuery.type"
@@ -134,7 +100,6 @@
                         >
                         </el-select>
                     </el-form-item>
-                </el-form>
                 <div class="dialog-footer">
                     <el-button> Cancel </el-button>
                     <el-button type="primary"> Confirm </el-button>
@@ -150,7 +115,7 @@
     />
 </template>
 <script lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import axios from "axios";
 import addBook from "@components/Book.vue";
 import { useRouter } from "vue-router";
@@ -167,8 +132,14 @@ export default {
         const userStore = useUserStore();
         const tableData = ref([]);
         const bookVisible = ref(false);
+        const bookDetails = ref(null);
+        const dialogVisible = ref(false);
+        const closeDialog = () => {
+            dialogVisible.value = false;
+        };
         const listQuery = ref({
             name: "",
+            type: "",
         });
         const fetchBook = async () => {
             const url = "http://localhost:8080/api/getBook";
@@ -189,7 +160,7 @@ export default {
         const handleAddBookClose = () => {
             bookVisible.value = false;
         };
-        const borrowingBook = async (row) => {
+        const borrowingBook = async (row: { inventoryId: any; }) => {
             const url = "http://localhost:8080/api/book/borrowing";
             try {
                 const requestData = {
@@ -209,7 +180,7 @@ export default {
                 console.error("Error borrowing book:", error);
             }
         };
-        const returnBook = async (row) => {
+        const returnBook = async (row: { inventoryId: any; }) => {
             const url = "http://localhost:8080/api/book/return";
             try {
                 const requestData = {
@@ -231,10 +202,11 @@ export default {
                 console.error("Error return book:", error);
             }
         };
-        const stock = async (row) => {
+        const stock = async (row: { inventoryId: any; }) => {
             const url = "http://localhost:8080/api/book/stock";
             try {
                 const requestData = {
+                    userId: userStore.userId,
                     inventoryId: row.inventoryId,
                 };
                 const response = await axios.post(url, requestData);
@@ -248,10 +220,11 @@ export default {
                 console.error("Error stock :", error);
             }
         };
-        const lost = async (row) => {
+        const lost = async (row: { inventoryId: any; }) => {
             const url = "http://localhost:8080/api/book/lost";
             try {
                 const requestData = {
+                    userId: userStore.userId,
                     inventoryId: row.inventoryId,
                 };
                 const response = await axios.post(url, requestData);
@@ -265,10 +238,11 @@ export default {
                 console.error("Error lost :", error);
             }
         };
-        const damaged = async (row) => {
+        const damaged = async (row: { inventoryId: any; }) => {
             const url = "http://localhost:8080/api/book/damaged";
             try {
                 const requestData = {
+                    userId: userStore.userId,
                     inventoryId: row.inventoryId,
                 };
                 const response = await axios.post(url, requestData);
@@ -282,10 +256,11 @@ export default {
                 console.error("Error damaged :", error);
             }
         };
-        const scrap = async (row) => {
+        const scrap = async (row: { inventoryId: any; }) => {
             const url = "http://localhost:8080/api/book/scrap";
             try {
                 const requestData = {
+                    userId: userStore.userId,
                     inventoryId: row.inventoryId,
                 };
                 const response = await axios.post(url, requestData);
@@ -322,6 +297,9 @@ export default {
             tableData,
             userStore,
             bookVisible,
+            bookDetails,
+            dialogVisible,
+            closeDialog,
             listQuery,
             form,
             fetchBook,

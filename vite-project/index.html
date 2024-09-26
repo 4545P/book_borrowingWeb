@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="light">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
@@ -8,6 +8,62 @@
   </head>
   <body>
     <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>
+<script setup lang="ts">
+  import { ref } from 'vue'
+  const isDark = ref(true)
+  const toggleDark = () => {
+    isDark.value = !isDark.value
+    const html = document.querySelector('html')
+    if (html) {
+      if (isDark.value) {
+        html.classList.remove("dark");
+        html.classList.add("light");
+      } else {
+        html.classList.remove("light");
+        html.classList.add("dark");
+      }
+  }
+  }
+  
+  </script>
+  
+  <style scoped lang="scss">
+  .dark-box {
+    margin-right: 20px;
+  }
+  .switch {
+    width: 40px;
+    height: 20px;
+    border: 1px solid #dcdfe6;
+    border-radius: 10px;
+    box-sizing: border-box;
+    cursor: pointer;
+    padding-bottom: 0;
+    padding-top: 0px;
+  
+    background-color: #ebeef5 !important;
+    font-size: 12px;
+  }
+  
+  .isDark-switch {
+    .el-icon {
+      background-color: #fff !important;
+      padding: 2px;
+      border-radius: 50%;
+      color: #000;
+      margin-left: -8px;
+    }
+  }
+  
+  .noDark-switch {
+    background-color: rgb(8, 8, 8) !important;
+  
+    .el-icon {
+      color: #fff;
+      margin-left: 15px;
+    }
+  }
+  </style>

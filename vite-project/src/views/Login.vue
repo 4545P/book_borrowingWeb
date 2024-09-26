@@ -3,9 +3,9 @@
         <form @submit="login" class="login">
             <input
                 type="text"
-                placeholder="phone"
+                placeholder="name"
                 class="text"
-                v-model="phone"
+                v-model="name"
             />
             <input
                 type="password"
@@ -13,14 +13,11 @@
                 class="password"
                 v-model="password"
             />
-            <input type="submit" value="submit" class="submit" />
-            <el-button
-                type="primary"
-                round
-                style="margin-left: 12px"
-                @click="register"
-                >註冊</el-button
-            >
+            <input type="submit" value="登入" class="submit" />
+            <a href="/register" class="btn">
+                註冊
+                <span></span><span></span><span></span><span></span>
+            </a>
         </form>
     </div>
 </template>
@@ -31,10 +28,10 @@ import { useRouter } from "vue-router";
 
 export default {
     setup() {
-        const phone = ref("admin");
-        const password = ref("admin");
+        const name = ref("");
+        const password = ref("");
         const router = useRouter();
-        const login = async (event) => {
+        const login = async (event: { preventDefault: () => void; }) => {
             event.preventDefault();
             try {
                 const { useUserStore } = await import("@store/index");
@@ -42,21 +39,22 @@ export default {
                 const response = await axios.post(
                     "http://localhost:8080/api/user/isValid",
                     {
-                        phone: phone.value,
+                        name: name.value,
                         password: password.value,
                     }
                 );
+                const { message } = response.data;
                 if (response.status === 200) {
                     const userInfo = {
                         userId: response.data.userId,
                         name: response.data.name,
                         phone: response.data.phone,
                     };
-                    if (response.data.message === "登入成功") {
+                    if (response.data.message === "成功") {
                         userStore.login(userInfo);
                         router.push("/home");
                     } else {
-                        alert("帳密錯誤");
+                        alert(`登入失敗: ${message}`);
                     }
                 } else {
                     console.error("登入請求失敗");
@@ -65,14 +63,10 @@ export default {
                 console.error("登入請求出錯", error);
             }
         };
-        const register = () => {
-            router.push("/register"); // 假设注册页面的路由路径是 '/register'
-        };
         return {
-            phone,
+            name,
             password,
             login,
-            register,
             router,
         };
     },
@@ -123,6 +117,11 @@ input {
     width: 280px;
     transition: 0.5s;
 }
+::placeholder {
+    color: #999;
+    opacity: 1;
+}
+
 .checkbox {
     margin: 0 0;
 }
@@ -134,5 +133,53 @@ input {
 .submit:hover {
     background-color: #2ecc71;
     transition: 0.5s;
+}
+.btn {
+    margin: 20px auto;
+    display: block;
+    position: relative;
+    z-index: 1;
+    width: 150px;
+    background: #777;
+    border: 2px solid #2ecc71;
+    border-radius: 20em;
+    color: aliceblue;
+    text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
+    overflow: hidden;
+    transition: 0.5s;
+    padding: 10px 20px;
+}
+.btn span {
+    position: absolute;
+    width: 25%;
+    height: 100%;
+    background-color: #2ecc71;
+    transform: translateY(150%);
+    border-radius: 20em;
+    left: calc((var(--n) - 1) * 25%);
+    transition: 0.5s;
+    transition-delay: calc((var(--n) - 1) * 0.1s);
+    z-index: -1;
+}
+.btn:hover,
+.btn:focus {
+    color: aliceblue;
+}
+.btn:hover span {
+    transform: translateY(0) scale(2);
+}
+.btn span:nth-child(1) {
+    --n: 1;
+}
+.btn span:nth-child(2) {
+    --n: 2;
+}
+.btn span:nth-child(3) {
+    --n: 3;
+}
+.btn span:nth-child(4) {
+    --n: 4;
 }
 </style>
