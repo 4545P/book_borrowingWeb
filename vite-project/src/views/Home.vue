@@ -2,43 +2,43 @@
     <div class="app">
         <div class="app-container" style="width: 90vw; margin: 0 auto">
             <div class="filter-container">
-                <el-input
+                <El-input
                     v-model="listQuery.name"
                     placeholder="書名"
                     style="width: 180px; height: 65px"
                     class="filter-item"
                 />
-                <el-button
+                <El-button
                     type="primary"
                     round
                     style="margin-left: 12px"
                     @click="fetchBook"
                 >搜尋
-                </el-button>
-                <el-button
+                </El-button>
+                <El-button
                     type="primary"
                     round
                     style="margin-left: 12px"
                     @click="AddBook"
                 >新增書籍
-                </el-button>
-                <el-button
+                </El-button>
+                <El-button
                     type="primary"
                     round
                     style="margin-left: 12px"
                     @click="logout"
                 >登出
-                </el-button>
+                </El-button>
             </div>
             <div class="list-container">
-                <el-table
+                <El-table
                     :data="tableData"
                     border
                     fit
                     highlight-current-row
                     style="width: 100%"
                 >
-                    <el-table-column
+                    <El-table-column
                         label="ID"
                         prop="inventoryId"
                         align="center"
@@ -47,64 +47,64 @@
                         <template #default="{ row }">
                             <span>{{ row.inventoryId }}</span>
                         </template>
-                    </el-table-column>
-                    <el-table-column label="ISBN" prop="isbn" min-width="70px">
+                    </El-table-column>
+                    <El-table-column label="ISBN" prop="isbn" min-width="70px">
                         <template #default="{ row }">
                             <span class="link-type">{{ row.isbn }}</span>
                         </template>
-                    </el-table-column>
-                    <el-table-column label="書名" prop="name" min-width="70px">
+                    </El-table-column>
+                    <El-table-column label="書名" prop="name" min-width="70px">
                         <template #default="{ row }">
                             <span class="link-type">{{ row.name }}</span>
                         </template>
-                    </el-table-column>
-                    <el-table-column label="狀態" prop="status" min-width="70px">
+                    </El-table-column>
+                    <El-table-column label="狀態" prop="status" min-width="70px">
                         <template #default="{ row }">
                             <span class="link-type">{{ row.status }}</span>
                         </template>
-                    </el-table-column>
-                    <el-table-column label="操作" align="center" width="750" class-name="small-padding fixed-width">
+                    </El-table-column>
+                    <El-table-column label="操作" align="center" width="750" class-name="small-padding fixed-width">
                         <template #default="{ row }">
-                            <el-button type="primary" round @click="borrowingBook(row)">借書</el-button>
-                            <el-button type="success" round @click="returnBook(row)">還書</el-button>
-                            <el-button round @click="stock(row)">入庫</el-button>
-                            <el-button type="info" round @click="lost(row)">遺失</el-button>
-                            <el-button type="warning" round @click="damaged(row)">損毀</el-button>
-                            <el-button type="danger" round @click="scrap(row)">銷毀</el-button>
+                            <El-button type="primary" round @click="borrowingBook(row)">借書</El-button>
+                            <El-button type="success" round @click="returnBook(row)">還書</El-button>
+                            <El-button round @click="stock(row)">入庫</El-button>
+                            <El-button type="info" round @click="lost(row)">遺失</El-button>
+                            <El-button type="warning" round @click="damaged(row)">損毀</El-button>
+                            <El-button type="danger" round @click="scrap(row)">銷毀</El-button>
                         </template>
-                    </el-table-column>
-                </el-table>
-                <el-dialog title="Chart" width="70%">
+                    </El-table-column>
+                </El-table>
+                <El-dialog title="Chart" width="70%">
                     <div class="chart-container">
                         <div id="pieChart" style="width: 100%; height: 400px"></div>
                     </div>
                     <span class="dialog-footer">
-                        <el-button>離開</el-button>
+                        <El-button>離開</El-button>
                     </span>
-                </el-dialog>
+                </El-dialog>
             </div>
-            <el-dialog>
-                <el-form
+            <El-dialog>
+                <El-form
                     ref="dataForm"
                     :model="listQuery"
                     label-position="left"
                     label-width="70px"
                     style="width: 400px; margin-left: 50px"
             >
-            </el-form>
-                    <el-form-item label="Type" prop="type">
-                        <el-select
+            </El-form>
+                    <El-form-item label="Type" prop="type">
+                        <El-select
                             v-model="listQuery.type"
                             class="filter-item"
                             placeholder="Please select"
                         >
-                        </el-select>
-                    </el-form-item>
+                        </El-select>
+                    </El-form-item>
                 <div class="dialog-footer">
-                    <el-button> Cancel </el-button>
-                    <el-button type="primary"> Confirm </el-button>
+                    <El-button> Cancel </El-button>
+                    <El-button type="primary"> Confirm </El-button>
                 </div>
-            </el-dialog>
+            </El-dialog>
         </div>
     </div>
     <addBook v-if="bookVisible" @close="handleAddBookClose" />

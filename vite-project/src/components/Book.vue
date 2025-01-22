@@ -1,39 +1,39 @@
 <template lang="">
-    <el-dialog v-model="submitBookForm" title="新增書籍" width="70%">
-        <el-input
+    <El-dialog v-model="submitBookForm" title="新增書籍" width="70%">
+        <El-input
             v-model="form.isbn"
             placeholder="書號"
             prop="isbn"
             style="display: flex; margin: 0 auto; padding: 8px; width: 70%"
         />
-        <el-input
+        <El-input
             v-model="form.name"
             placeholder="書名"
             prop="name"
             style="display: flex; margin: 0 auto; padding: 8px; width: 70%"
         />
-        <el-input
+        <El-input
             v-model="form.author"
             placeholder="作者"
             prop="author"
             style="display: flex; margin: 0 auto; padding: 8px; width: 70%"
         />
-        <el-input
+        <El-input
             v-model="form.introduction"
             placeholder="簡介"
             prop="introduction"
             style="display: flex; margin: 0 auto; padding: 8px; width: 70%"
         />
-        <el-form-item>
-            <el-button
+        <El-form-item>
+            <El-button
                 type="primary"
                 native-type="submit"
                 style="display: flex; margin: 0 80%"
                 @click="bookForm"
-                >提交</el-button
+                >提交</El-button
             >
-        </el-form-item>
-    </el-dialog>
+        </El-form-item>
+    </El-dialog>
 </template>
 <script lang="ts">
 import { ref } from "vue";

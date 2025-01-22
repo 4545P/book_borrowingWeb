@@ -1,7 +1,7 @@
 <template>
     <div id="app" class="flex justify-center">
         <div class="dark-box">
-            <el-button text class="switch" :class="isDark ? 'isDark-switch' : 'noDark-switch'" @click="toggleDark">
+            <El-button text class="switch" :class="isDark ? 'isDark-switch' : 'noDark-switch'" @click="toggleDark">
             <el-icon v-if="isDark">
                 <svg viewBox="0 0 24 24">
                 <path
@@ -16,7 +16,7 @@
                     fill="currentColor"></path>
                 </svg>
             </el-icon>
-            </el-button>
+            </El-button>
         </div>
         <router-view />
     </div>
