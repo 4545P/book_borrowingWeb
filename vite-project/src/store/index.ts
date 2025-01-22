@@ -6,19 +6,20 @@ export const useUserStore = defineStore("user", {
         name: "",
         phone: "",
     }),
+    persist: true,
     actions: {
-        setUser(userInfo) {
+        setUser(userInfo: { userId: string; name: string; phone: string; }) {
             this.userId = userInfo.userId;
             this.name = userInfo.name;
             this.phone = userInfo.phone;
         },
-        login(userInfo) {
+        login(userInfo: { userId: string; name: string; phone: string; }) {
             this.setUser(userInfo);
         },
         clearUser() {
-            this.userId = null;
-            this.name = null;
-            this.phone = null;
+            this.userId = "";
+            this.name = "";
+            this.phone = "";
         },
     },
 });

@@ -119,7 +119,7 @@ import { ref, onMounted, watch } from "vue";
 import axios from "axios";
 import addBook from "@components/Book.vue";
 import { useRouter } from "vue-router";
-import { useUserStore } from "@store/index";
+import { useUserStore } from '../store/index';
 
 export default {
     props: {},
@@ -168,17 +168,18 @@ export default {
                     inventoryId: row.inventoryId,
                 };
                 const response = await axios.post(url, requestData);
-                if (response.data.message === "借閱成功") {
+                const { message } = response.data;
+                if (response.data.message === "成功") {
                     console.log(response.data);
-                    alert("借閱成功");
-                    fetchBook();
+                    alert(`${message}`);
                 } else {
-                    alert("借閱失敗");
+                    alert(`${message}`);
                 }
             } catch (error) {
-                alert("借閱失敗");
+                alert(`借閱請求錯誤`);
                 console.error("Error borrowing book:", error);
             }
+            fetchBook();
         };
         const returnBook = async (row: { inventoryId: any; }) => {
             const url = "http://localhost:8080/api/book/return";
@@ -188,19 +189,20 @@ export default {
                     inventoryId: row.inventoryId,
                 };
                 const response = await axios.post(url, requestData);
-                if (response.data.message === "還書成功") {
+                const { message } = response.data;
+                if (response.data.message === "成功") {
                     console.log(response.data);
-                    alert("還書成功");
-                    fetchBook();
+                    alert(`${message}`);
                 } else if (response.data.message === "沒有借閱紀錄") {
-                    alert("沒有借閱紀錄");
+                    alert(`${message}`);
                 } else {
-                    alert("還書失敗");
+                    alert(`${message}`);
                 }
             } catch (error) {
-                alert("還書失敗");
+                alert("還書請求錯誤");
                 console.error("Error return book:", error);
             }
+            fetchBook();
         };
         const stock = async (row: { inventoryId: any; }) => {
             const url = "http://localhost:8080/api/book/stock";
@@ -210,15 +212,18 @@ export default {
                     inventoryId: row.inventoryId,
                 };
                 const response = await axios.post(url, requestData);
-                if (response.data.message === "在庫") {
+                const { message } = response.data;
+                if (response.data.message === "整理中") {
                     console.log(response.data);
-                    alert("整理完成 入庫");
-                    fetchBook();
+                    alert(`${message}`);
+                } else {
+                    alert(`${message}`);
                 }
             } catch (error) {
-                alert("入庫失敗");
+                alert("入庫請求失敗");
                 console.error("Error stock :", error);
             }
+            fetchBook();
         };
         const lost = async (row: { inventoryId: any; }) => {
             const url = "http://localhost:8080/api/book/lost";
@@ -228,15 +233,16 @@ export default {
                     inventoryId: row.inventoryId,
                 };
                 const response = await axios.post(url, requestData);
+                const { message } = response.data;
                 if (response.data.message === "遺失") {
                     console.log(response.data);
-                    alert("登記遺失");
-                    fetchBook();
+                    alert(`${message}`);
                 }
             } catch (error) {
-                alert("登記失敗");
+                alert("登記請求失敗");
                 console.error("Error lost :", error);
             }
+            fetchBook();
         };
         const damaged = async (row: { inventoryId: any; }) => {
             const url = "http://localhost:8080/api/book/damaged";
@@ -246,15 +252,16 @@ export default {
                     inventoryId: row.inventoryId,
                 };
                 const response = await axios.post(url, requestData);
+                const { message } = response.data;
                 if (response.data.message === "損毀") {
                     console.log(response.data);
-                    alert("登記損毀");
-                    fetchBook();
+                    alert(`${message}`);
                 }
             } catch (error) {
-                alert("登記失敗");
+                alert("登記請求失敗");
                 console.error("Error damaged :", error);
             }
+            fetchBook();
         };
         const scrap = async (row: { inventoryId: any; }) => {
             const url = "http://localhost:8080/api/book/scrap";
@@ -264,15 +271,16 @@ export default {
                     inventoryId: row.inventoryId,
                 };
                 const response = await axios.post(url, requestData);
+                const { message } = response.data;
                 if (response.data.message === "報廢") {
                     console.log(response.data);
-                    alert("登記報廢");
-                    fetchBook();
+                    alert(`${message}`);
                 }
             } catch (error) {
-                alert("登記失敗");
+                alert("登記請求失敗");
                 console.error("Error scrap :", error);
             }
+            fetchBook();
         };
         const form = ref({
             inventoryId: "",

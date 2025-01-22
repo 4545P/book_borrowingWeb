@@ -54,7 +54,7 @@ export default {
                         userStore.login(userInfo);
                         router.push("/home");
                     } else {
-                        alert(`登入失敗: ${message}`);
+                        alert(`登入: ${message}`);
                     }
                 } else {
                     console.error("登入請求失敗");

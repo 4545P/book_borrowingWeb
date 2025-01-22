@@ -67,6 +67,7 @@ export default {
                     console.error("API Error:", error);
                     alert("新增失敗");
                 });
+                window.location.reload();
         };
         return {
             visibleRef,
